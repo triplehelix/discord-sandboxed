@@ -76,7 +76,8 @@ onload = () => {
         'https://discord.com/api/v9/invites/',         // Accepting guild invite
         'https://discord.com/api/v9/voice/regions',    // Required when creating new guild
         'https://discord.com/api/v9/guilds',           // Creating a guild
-        'https://discord.com/api/v9/gateway',         // This may be required to get past login screen if not cached locally
+        'https://discord.com/api/v9/gateway',          // This may be required to get past login screen if not cached locally
+        'https://discord.com/api/v9/interactions',     // Slash Commands
         'https://discord.com/api/v9/applications/',
         'https://discord.com/api/v9/users/'
     ]
