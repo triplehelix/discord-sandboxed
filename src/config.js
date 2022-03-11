@@ -1,5 +1,5 @@
 const {app} = require('electron')
-const fs = require('graceful-fs')
+const fs = require('fs')
 const path = require('path')
 
 function _saveToConfig (configObj) {

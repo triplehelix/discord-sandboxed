@@ -23,7 +23,6 @@ let settingsWindow
 
 let devMode = false
 let selfMute = false
-let isConnected = false
 let webViewSession = null
 //let isTalking = false
 let muteTimeout = null
@@ -188,7 +187,7 @@ function setPTTKey() {
     }
 
     ioHook.on(pttEnable, event => {
-      if (event[pttWatch] == configObj.key && (micPermissionGranted === true) && (isConnected === true) && (isChangingPTTKey === false)) {
+      if (event[pttWatch] == configObj.key && (micPermissionGranted === true) && (isChangingPTTKey === false)) {
         clearTimeout(muteTimeout)
         unmuteMic()
       }
@@ -309,12 +308,6 @@ ipcMain.on('asynchronous-message', (event, _data) => {
     if (micPermissionGranted === false && selfMute === false){
       micPermissionGranted = true
     }
-    isConnected = true
-  }
-
-  if (msg === 'disconnected') {
-    console.log("User disconnected to Discord VOIP server")
-    isConnected = false
   }
 
   if (msg === 'self-muted') {
@@ -334,8 +327,6 @@ ipcMain.on('asynchronous-message', (event, _data) => {
   }
 
   if (msg === 'confirmMicClose') {
-    //if (isTalking === true) {
-      //console.log("Mic state desync. Opening Mic.")
       unmuteMic()
     //}
   }
@@ -496,9 +487,8 @@ app.on('ready', event => {
     })
     .then(configObj => {
       console.log(configObj)
-      restartioHook().then(() => {
-        setPTTKey()
-      })
+      ioHook.start()
+      setPTTKey()
   })
 })
 
