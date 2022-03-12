@@ -158,14 +158,8 @@ function restartioHook() {
           console.log("ioHook stopped")
           return resolve(true)
       }).then (v => {
-        return new Promise((resolve, reject) => {
-          ioHook.load()
-          console.log("ioHook started")
-          return resolve(true)
-        }).then(v => {
           ioHook.start()
           return resolve(true)
-        })
       })
     })
   }
@@ -407,7 +401,7 @@ ipcMain.on('asynchronous-message', (event, _data) => {
           console.log("waiting for user to rebind")
           if (settingsWindow && isChangingPTTKey) {
             
-            restartioHook().then(v => {
+
 
               mainWindow.blur()
               
@@ -435,7 +429,7 @@ ipcMain.on('asynchronous-message', (event, _data) => {
                   setPTTKey()
                 }
               })
-            })
+            
           }
       }
     }
