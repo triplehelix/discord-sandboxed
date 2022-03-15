@@ -13,6 +13,14 @@ ipcRenderer.on('focused', (event, msg) => {
   window.postMessage({ type: "focused"}, "*")
 })
 
+ipcRenderer.on('settings_diff', (event, msg) => {
+  window.postMessage({ type: "settings_diff"}, "*")
+})
+
+ipcRenderer.on('settings_not_diff', (event, msg) => {
+  window.postMessage({ type: "settings_not_diff"}, "*")
+})
+
 // Pass commands sent from settings window (processed by settingsRender.js) to main.js
 window.addEventListener(
     "message",

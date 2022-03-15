@@ -145,26 +145,6 @@ function maximizeMinimizeState(windowName){
   }
 }
 
-function restartioHook() {
-  if (ioHook) {
-    console.log("restarting io Hook")
-    return new Promise((resolve, reject) => {
-      return new Promise((resolve, reject) => {
-          ioHook.removeAllListeners('mousedown', () => {})
-          ioHook.removeAllListeners('mouseup', () => {})
-          ioHook.removeAllListeners('keydown', () => {})
-          ioHook.removeAllListeners('keyup', () => {})
-          ioHook.unload()
-          console.log("ioHook stopped")
-          return resolve(true)
-      }).then (v => {
-          ioHook.start()
-          return resolve(true)
-      })
-    })
-  }
-}
-
 function setPTTKey() {
   if (ioHook && configObj.pttDevice && configObj.pttDevice) {
     console.log("Set PTT Key")
@@ -200,6 +180,10 @@ function setPTTKey() {
   }else {
     console.log("Not listening for keypresses. ioHook library error or PTT keys not set.")
   }
+}
+
+function check_is_settings_changed(){
+  saveConfig
 }
 
 app.on('ready', createMainWindow)
@@ -399,10 +383,8 @@ ipcMain.on('asynchronous-message', (event, _data) => {
       if (ioHook) {
           isChangingPTTKey = true
           console.log("waiting for user to rebind")
+
           if (settingsWindow && isChangingPTTKey) {
-            
-
-
               mainWindow.blur()
               
               ioHook.once('keydown', event => {
@@ -411,7 +393,7 @@ ipcMain.on('asynchronous-message', (event, _data) => {
                   configObj.pttDevice = 'keyboard'
                   configObj.key = event.keycode
                   isChangingPTTKey = false
-                  saveConfig(configObj)
+                  //saveConfig(configObj)
                   settingsWindow.webContents.send('settingsObj', configObj)
                   setPTTKey()
                 }
@@ -424,12 +406,11 @@ ipcMain.on('asynchronous-message', (event, _data) => {
                   configObj.pttDevice = 'mouse'
                   configObj.key = event.button
                   isChangingPTTKey = false
-                  saveConfig(configObj)
+                  //saveConfig(configObj)
                   settingsWindow.webContents.send('settingsObj', configObj)
                   setPTTKey()
                 }
               })
-            
           }
       }
     }
@@ -438,14 +419,14 @@ ipcMain.on('asynchronous-message', (event, _data) => {
   if (msg === 'cancelSetPTTKey') {
     console.log("cancel set new PTT")
     isChangingPTTKey = false
-    saveConfig(configObj)
+    //saveConfig(configObj)
     settingsWindow.webContents.send('settingsObj', configObj)
   }
 
   if (msg === 'setPTTDelay') {
     console.log(`New PTT Delay: ${_data.data} ms`)
     configObj.delay = _data.data
-    saveConfig(configObj)
+    //saveConfig(configObj)
     settingsWindow.webContents.send('settingsObj', configObj)
   }
 

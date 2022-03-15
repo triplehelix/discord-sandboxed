@@ -4,6 +4,9 @@ let configObj = null
 
 let isSettingPTTKey = false
 
+const save_restart_button = document.getElementById("save_and_restart")
+save_restart_button.disabled = true
+
 onload = () => {
     window.postMessage({ type: "SettingsDOMReady"}, "*")
     console.log("sent dom ready")
@@ -79,6 +82,16 @@ window.addEventListener(
             if (event.data.type === 'focused'){
                 console.log("window focused")
                 document.getElementById('titleBar').style.color = "#ffffff"
+            }
+
+            if (event.data.type === 'settings_diff') {
+                console.log("settings are changed")
+                save_restart_button.disabled = false
+            }
+
+            if (event.data.type === 'settings_not_diff') {
+                console.log("settings are not changed")
+                save_restart_button.disabled = true
             }
         }
     },
