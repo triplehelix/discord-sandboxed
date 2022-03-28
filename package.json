@@ -18,16 +18,16 @@
   "author": "Kin-Ho Lam",
   "license": "GNU GENERAL PUBLIC LICENSE Version 3",
   "devDependencies": {
-    "electron": "^16.1.0",
+    "electron": "^11.5.0",
     "electron-builder": "^21.2.0"
   },
   "dependencies": {
-    "@khlam/iohook": "file:iohook-0.9.3-npm.tgz",
-    "chokidar": "^3.3.1"
+    "chokidar": "^3.3.1",
+    "iohook": "^0.9.3"
   },
   "iohook": {
     "targets": [
-      "electron-99"
+      "electron-85"
     ],
     "platforms": [
       "win32"

@@ -9,7 +9,7 @@ const { initConfig, saveConfig } = require('./src/config')
 let ioHook = null
 
 try {
-  ioHook = require('@khlam/iohook')
+  ioHook = require('iohook')
 } catch(e) {
   console.log(e)
   ioHook = false
