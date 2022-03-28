@@ -23,9 +23,8 @@ let settingsWindow
 
 let devMode = false
 let selfMute = false
-let isConnected = false
 let webViewSession = null
-let isTalking = false
+//let isTalking = false
 let muteTimeout = null
 let configObj
 let micPermissionGranted = false
@@ -44,12 +43,12 @@ if (process.argv.length === 3) {
 }
 
 function unmuteMic() {
-  if ( selfMute === false){
-    isTalking = true
+  //if ( selfMute === false){
+    //isTalking = true
     console.log("Talking")
     mainWindow.webContents.send('micOpen', 'mic-open')
     mainWindow.setTitle("MIC OPEN")
-  }
+  //}
 }
 
 function muteMic() {
@@ -188,7 +187,7 @@ function setPTTKey() {
     }
 
     ioHook.on(pttEnable, event => {
-      if (event[pttWatch] == configObj.key && (micPermissionGranted === true) && (isConnected === true) && (isChangingPTTKey === false)) {
+      if (event[pttWatch] == configObj.key && (micPermissionGranted === true) && (isChangingPTTKey === false)) {
         clearTimeout(muteTimeout)
         unmuteMic()
       }
@@ -196,10 +195,11 @@ function setPTTKey() {
     
     ioHook.on(pttDisable, event => {
       if (event[pttWatch] == configObj.key) {
-        if (isTalking === true) {
-          isTalking = false
+        console.log("PTT pushed down")
+        //if (isTalking === true) {
+          //isTalking = false
           muteTimeout = setTimeout(() => muteMic(), configObj.delay)
-        }
+        //}
       }
     })
 
@@ -290,7 +290,7 @@ app.on('ready', () => {
   webViewSession.setPermissionRequestHandler((webContents, permission, callback) => { // deny all permissions
       const url = webContents.getURL()
       if (url.startsWith('https://discord.com/')) {
-        if (permission === 'media' && isConnected === true) { // if user is connected to Discord voice then enable microphone
+        if (permission === 'media') { // if user is connected to Discord voice then enable microphone
           console.log("User connected to Discord VOIP server. Granted permission for microphone")
           micPermissionGranted = true
           return callback(true)
@@ -308,12 +308,6 @@ ipcMain.on('asynchronous-message', (event, _data) => {
     if (micPermissionGranted === false && selfMute === false){
       micPermissionGranted = true
     }
-    isConnected = true
-  }
-
-  if (msg === 'disconnected') {
-    console.log("User disconnected to Discord VOIP server")
-    isConnected = false
   }
 
   if (msg === 'self-muted') {
@@ -333,10 +327,8 @@ ipcMain.on('asynchronous-message', (event, _data) => {
   }
 
   if (msg === 'confirmMicClose') {
-    if (isTalking === true) {
-      console.log("Mic state desync. Opening Mic.")
       unmuteMic()
-    }
+    //}
   }
 
   if (msg === 'blockUpdate') {
@@ -495,9 +487,8 @@ app.on('ready', event => {
     })
     .then(configObj => {
       console.log(configObj)
-      restartioHook().then(() => {
-        setPTTKey()
-      })
+      ioHook.start()
+      setPTTKey()
   })
 })
 

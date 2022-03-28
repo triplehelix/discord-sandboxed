@@ -21,14 +21,14 @@ function convertObjToString(arr) {
 
 function openMic(webview){  
     console.log("talking")
-    document.getElementById("overlay").style.display = "block";
+    //document.getElementById("overlay").style.display = "block";
     webview.sendInputEvent({keyCode: 'Backspace', type: 'keyDown'});
     //webview.sendInputEvent({keyCode: 'Backspace', type: 'char'});
 }
 
 function muteMic(webview){
     console.log("not talking")
-    document.getElementById("overlay").style.display = "none";
+    //document.getElementById("overlay").style.display = "none";
     webview.sendInputEvent({keyCode: 'Backspace', type: 'keyUp'});
     //webview.sendInputEvent({keyCode: 'Backspace', type: 'char'});
 }
@@ -39,6 +39,7 @@ function removeBloat(webview) {
         'noticeDefault',
         'noticeBrand',
         'actionButtons-14eAc_',
+        'actionButtons-2vEOUh'
     ]
     webview.executeJavaScript(`document.querySelectorAll('[aria-label="Download Apps"]')[document.querySelectorAll('[aria-label="Download Apps"]').length - 1].style.display = 'none';`) // Remove download button
     bloatList.forEach(function(tag){
@@ -51,9 +52,10 @@ function removeBloat(webview) {
     })
 }
 
+/*
 function userMuteDeafenListener(webview) {
     webview.executeJavaScript(`
-    const userMuteDeafen = document.getElementsByClassName("container-3baos1")[0]
+    const userMuteDeafen = document.getElementsByClassName("contents-3ca1mk")[0]
     const userMuteDeafenconfig = { attributes: false, childList: true, subtree: true, characterData: false };
     
     const userMuteDeafencallback = function(mutationsList, observer) {
@@ -62,7 +64,7 @@ function userMuteDeafenListener(webview) {
     const userMuteDeafenObserver = new MutationObserver(userMuteDeafencallback);
     userMuteDeafenObserver.observe(userMuteDeafen, userMuteDeafenconfig);
     `)
-}
+}*/
 
 onload = () => {
     document.getElementById("overlay").style.display = "none";
@@ -76,7 +78,8 @@ onload = () => {
         'https://discord.com/api/v9/invites/',         // Accepting guild invite
         'https://discord.com/api/v9/voice/regions',    // Required when creating new guild
         'https://discord.com/api/v9/guilds',           // Creating a guild
-        'https://discord.com/api/v9/gateway',         // This may be required to get past login screen if not cached locally
+        'https://discord.com/api/v9/gateway',          // This may be required to get past login screen if not cached locally
+        'https://discord.com/api/v9/interactions',     // Slash Commands
         'https://discord.com/api/v9/applications/',
         'https://discord.com/api/v9/users/'
     ]
@@ -201,17 +204,17 @@ onload = () => {
 
         if (e.message === "muted") {
             console.log("Self Muted in Discord")
-            window.postMessage({ type: "self-muted"}, "*")
+            //window.postMessage({ type: "self-muted"}, "*")
         }
 
         if (e.message === "unmuted") {
             console.log("Self Un-Muted in Discord")
-            window.postMessage({ type: "self-unmuted"}, "*")
+            //window.postMessage({ type: "self-unmuted"}, "*")
         }
 
         // Execute JS into the webview after login
         if (e.message === "--discord-load-complete") {
-            userMuteDeafenListener(webview)
+            //userMuteDeafenListener(webview)
             removeBloat(webview)
         }
         
